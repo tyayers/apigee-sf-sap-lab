@@ -242,7 +242,12 @@ public class RestApiCall implements System.Queueable, Database.AllowsCallouts {
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      document.getElementById("arrow-back").style.display = "none";
+      document.getElementById("arrow-back").href="#"; 
+
+      document.getElementById("arrow-back").addEventListener( 'click', function() { 
+        window.history.back();
+      }); 
+      //document.getElementById("arrow-back").style.display = "none";
       //document.getElementById("arrow-back").style.pointerEvents="none";
       //document.getElementById("arrow-back").style.cursor="default";
     }, false);
