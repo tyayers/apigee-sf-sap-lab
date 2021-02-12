@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Manifest name="manifest">
     <Policies>
-        <VersionInfo resourceName="Get-Name" version="SHA-512:3096add45fc3e335bcffd8b1c29a0456c301b3a4792f4c436fff8b02e3e13b14c3bdd01aeb7c1935b392bf5d5b4bc0208edf5ad6e4317809eb34477ebb074f8e"/>
+        <VersionInfo resourceName="Get-Name" version="SHA-512:98c3e99c08db9ed6da8fa3627d1ddadbadc13e053683632201d3bdcc29701f6416d8034c97301f0bc0085e3f37f9bdc054c8c0b15ffae381c884816faa45520e"/>
         <VersionInfo resourceName="Prevent-URL-copy" version="SHA-512:47e5d7d8214a1d0b26136bba224454c48e17aa406081fa71159ea1ce619160fc3ea6ea23f3ecca5d1718c950541eb067c6739b3d37c5742ce11de41ac7029276"/>
         <VersionInfo resourceName="Simulate-Error" version="SHA-512:67b6830b6d2c759bc36bfa175b71c845fdcdc52e4ecd6b4a12db40af752b56f8fc91dd0fc61a530cc7a4285c0a89c634a2657ce05840ddf18886e15b5ea9d058"/>
         <VersionInfo resourceName="beautify-json" version="SHA-512:f7274e7588c65c6111c79dfebc69576baaa9494a064bcf668cc0ecf641c9bb59f83843f6b89877e93324cd7d5d85727c969cd0a5ff2b2b7fbf1798ef2b69a32a"/>
@@ -11,7 +11,7 @@
         <VersionInfo resourceName="default" version="SHA-512:bcf9cfdf86dc8654f5b5a0bea0b4b9e3ee75002e13398700c728fe1e8ac47ab409125519252c0421b1224ad1126c3c65f80bb013419197a8b81e12434244ffbb"/>
     </ProxyEndpoints>
     <Resources>
-        <VersionInfo resourceName="jsc://beautify-json.js" version="SHA-512:b4979d36c5207a2822840e7f22764c732d9b7c5a4b090d8feda5bb23b179a96c966e13ccd18edef6722407206c801afc9b88c110e38d608e73e154a1b26d106d"/>
+        <VersionInfo resourceName="jsc://beautify-json.js" version="SHA-512:e6ab7557240079eb94011bc8be7f24d9c86abcf45b5a59b1ebf6361ad6f5a03e08409929af6c4fdc4c8c468ef54ac60e2820a59267db7d4954832d3bda9c7486"/>
         <VersionInfo resourceName="jsc://mock.js" version="SHA-512:0c9c06a52ec53b71fcd7dac63f80c15cbbac6892d88102b95d5a4f4900addd7b95da901a78c33576770cdc80210d7c80bd8426887275f211dea85cb6159bb89c"/>
     </Resources>
     <SharedFlows/>

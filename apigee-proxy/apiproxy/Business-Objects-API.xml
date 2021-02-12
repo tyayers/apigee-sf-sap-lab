@@ -6,9 +6,9 @@
     <CreatedBy>defaultUser</CreatedBy>
     <Description></Description>
     <DisplayName>Business Objects API</DisplayName>
-    <LastModifiedAt>1613105163205</LastModifiedAt>
+    <LastModifiedAt>1613138358280</LastModifiedAt>
     <LastModifiedBy>defaultUser</LastModifiedBy>
-    <ManifestVersion>SHA-512:984918fbe5205cd8146b8b281063a74c60774e0719c719479beb14211186ed0c9fbcd064f5f6317f719dd3fa4c61f2297a5a55737a7ff8aee164df3252b7ae85:eu-west-1</ManifestVersion>
+    <ManifestVersion>SHA-512:a40e42d121c987b3d2830378a5f90406b38007cc1b39e7ef1b01fa760d4a50445527f4398361dbf1684c624d6fcf6cd8d4d7e484413838d4c2fac252d4c8ff15:eu-west-1</ManifestVersion>
     <Policies>
         <Policy>Get-Name</Policy>
         <Policy>Prevent-URL-copy</Policy>

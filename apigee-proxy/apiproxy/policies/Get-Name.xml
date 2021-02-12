@@ -3,6 +3,9 @@
     <DisplayName>Get-Name</DisplayName>
     <Properties/>
     <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <URIPath>
+        <Pattern ignoreCase="true">**/{resource}</Pattern>
+    </URIPath>
     <JSONPayload>
         <Variable name="name">
             <JSONPath>$.BusinessPartnerFullName</JSONPath>
