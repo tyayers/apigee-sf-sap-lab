@@ -241,6 +241,9 @@ public class RestApiCall implements System.Queueable, Database.AllowsCallouts {
   <script src="//support.google.com/inapp/api.js"></script>
 
   <script>
+    // This is to override the X / close handling on the page, unfortunately default handling
+    // is not wanted and now way to change, see this issue for more info:
+    // https://github.com/googlecodelabs/tools/issues/103
     document.addEventListener('DOMContentLoaded', function() {
       document.getElementById("arrow-back").href="#"; 
 
