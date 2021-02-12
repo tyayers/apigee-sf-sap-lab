@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<APIProxy revision="1" name="Business-Objects-API">
+    <Basepaths>/customers</Basepaths>
+    <ConfigurationVersion majorVersion="4" minorVersion="0"/>
+    <CreatedAt>1613020216670</CreatedAt>
+    <CreatedBy>defaultUser</CreatedBy>
+    <Description></Description>
+    <DisplayName>Business Objects API</DisplayName>
+    <LastModifiedAt>1613105163205</LastModifiedAt>
+    <LastModifiedBy>defaultUser</LastModifiedBy>
+    <ManifestVersion>SHA-512:984918fbe5205cd8146b8b281063a74c60774e0719c719479beb14211186ed0c9fbcd064f5f6317f719dd3fa4c61f2297a5a55737a7ff8aee164df3252b7ae85:eu-west-1</ManifestVersion>
+    <Policies>
+        <Policy>Get-Name</Policy>
+        <Policy>Prevent-URL-copy</Policy>
+        <Policy>Simulate-Error</Policy>
+        <Policy>beautify-json</Policy>
+        <Policy>mock</Policy>
+    </Policies>
+    <ProxyEndpoints>
+        <ProxyEndpoint>default</ProxyEndpoint>
+    </ProxyEndpoints>
+    <Resources>
+        <Resource>jsc://beautify-json.js</Resource>
+        <Resource>jsc://mock.js</Resource>
+    </Resources>
+    <Spec></Spec>
+    <TargetServers/>
+    <TargetEndpoints>
+        <TargetEndpoint>SAP Business Partner OData API</TargetEndpoint>
+    </TargetEndpoints>
+</APIProxy>

@@ -1,0 +1,26 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2021-02-11T14:57:53Z",
+  "id": "apigee_sf_sap",
+  "duration": 35,
+  "title": "Apigee / Salesforce / SAP Integration Lab",
+  "authors": "Tyler Ayers",
+  "summary": "In this demo we will show how to apply an API-First approach to integration for customer and order data between Apigee, Salesforce, and SAP.",
+  "source": "1mQosGlcczDcotp9pe-4yR8qe8rnqU1RnrvIoEaBbJ6c",
+  "theme": "advanced",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "Advanced",
+    "External"
+  ],
+  "tags": [
+    "web"
+  ],
+  "ga": "UA-143215160-5",
+  "url": "apigee_sf_sap"
+}
