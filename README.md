@@ -15,4 +15,6 @@ The flow covered in this lab is the creation of Account records in Salesforce, a
 
 ![Integration Flow](img/arch2.png)
 
+This approach can be generalized and applied to all integrations with backend systems - an **API-First** approach to integration is a great strategy to gain more freedom and reduce sticky dependencies in your service and app landscape.
+
 Comments, suggestions and feedback are welcome in the Issues.

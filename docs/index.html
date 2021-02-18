@@ -29,13 +29,15 @@
     
       <google-codelab-step label="Introduction" duration="0">
         <p class="image-container"><img style="width: 335.27px" src="img/7a8c0ed1371f055a.png"></p>
-<p><strong>Last Updated:</strong> 2020-2-10</p>
+<p><strong>Last Updated:</strong> 2020-2-18</p>
 <h2 is-upgraded><strong>Use-Case</strong></h2>
 <p>Customers who use Salesforce for CRM data and SAP for other ERP data are commonly confronted with the task of integrating and synchronizing data between these systems (and perhaps more smaller or homemade services in between).</p>
 <p>APIs can be a powerful tool to do integration.  The key to this approach is to have clean, modular APIs in between all communication.  Then we can easily connect those APIs to each of the different systems, and be able to exchange, migrate or update those systems seamlessly in the background.  This can actually have a huge impact on operations - with zero downtime migrations / updates basically for free because of the API facades governing and managing all of the integrations.</p>
 <p>This is not something that you can achieve overnight, but with the right foresight and planning, an API-First approach to integration can save thousands of person hours in migration and modernization effort.</p>
 <p class="image-container"><img style="width: 624.00px" src="img/6d02f8d89475f362.png"></p>
 <p>In the diagram above, we see the approach of having an independent integration in the Apigee API between Salesforce and SAP, managed by Apigee, and allowing the easy integration of further microservices and ecosystem apps, with access managed through a developer portal.</p>
+<p>This approach can be generalized and applied to all integrations with backend systems - an <strong>API-First </strong>approach to integration is a great strategy to gain more freedom and reduce sticky dependencies in your service and app landscape.</p>
+<p class="image-container"><img style="width: 624.00px" src="img/6022ea78aecf80e1.png"></p>
 <h2 is-upgraded><strong>What you&#39;ll build</strong></h2>
 <p>In this lab, you will connect a Salesforce sandbox environment to a REST API in Apigee that integrates with the OData Business Partner interface from SAP.  Using Salesforce you will then create a process flow that sends newly created Account records to the API which will then also create the Business Partner record in SAP.</p>
 <aside class="warning"><p><strong>Note:</strong> In this lab we will use a free, temporary sandbox for Salesforce and a realistic OData mock for SAP.  If you have access to real test systems for either Salesforce or SAP, you can also use those systems and just skip the sandbox and mock steps in this lab.</p>
@@ -95,7 +97,31 @@
 <p>Click on the <strong>New Remote Site</strong> button and add the <strong>base URL</strong> of our Apigee proxy that we imported in the previous section.  For my proxy, the base URL is <strong>&#34;</strong><a href="https://emea-poc13-test.apigee.net" target="_blank"><strong>https://emea-poc13-test.apigee.net</strong></a><strong>&#34;</strong>.</p>
 <p class="image-container"><img style="width: 624.00px" src="img/386f854c28135174.png"></p>
 <p>Click <strong>Save</strong>.</p>
-<h3 is-upgraded>Add an Apex Class for Accounts</h3>
+<h2 is-upgraded><strong>SAP setup</strong></h2>
+<p>For the purpose of this lab, it is easiest to use a SAP Business Partner mock class which allows us to use the OData APIs without an actual SAP system.  Here we have two mock classes, one for BusinessPartners and one for SalesOrders.</p>
+<h3 is-upgraded><strong>Business Partners</strong></h3>
+<p>Here is the sample OData mock project for SAP Business Partner data.</p>
+<p><a href="https://github.com/tyayers/sap-businesspartners-mock" target="_blank"><paper-button class="colored" raised>SAP Business Partner OData Mock Project</paper-button></a></p>
+<p>This mock is very easy to deploy to Cloud Run (just click the <strong>Run on Google Cloud</strong> button in the repo above), or you easily just reuse the deployment here (and is configured by default in the Apigee proxy that we deployed).</p>
+<p><a href="https://sap-s4-mock-h7pi7igbcq-ew.a.run.app/sap/opu/odata/sap/API_BUSINESS_PARTNER/A_BusinessPartner" target="_blank"><code>https://sap-s4-mock-h7pi7igbcq-ew.a.run.app/sap/opu/odata/sap/API_BUSINESS_PARTNER/A_BusinessPartner</code></a></p>
+<p>The mock service just stores the data in memory, so any added records are lost after the Cloud Run instance is killed after around 10 minutes of idle time.  There are 5 records that are always available.</p>
+<p>You can verify that your deployment (or the one above) is working properly by just running this command to see the default data made available by the endpoint.</p>
+<pre><code>curl &#34;https://sap-s4-mock-h7pi7igbcq-ew.a.run.app/sap/opu/odata/sap/API_BUSINESS_PARTNER/A_BusinessPartner&#34; | json_pp</code></pre>
+<h3 is-upgraded><strong>Sales Orders</strong></h3>
+<aside class="warning"><p><strong>Optional:</strong> The Sales Orders functionality here is identical in handling to the Accounts use-case above (just with different source and destination objects), so is optional for completing the lab.</p>
+</aside>
+<p>Similarly we have a sample OData mock project for SAP Sales Order data here.</p>
+<p><a href="https://github.com/tyayers/sap-salesorders-mock" target="_blank"><paper-button class="colored" raised>SAP Sales Order OData Mock Project</paper-button></a></p>
+<p>You can deploy the project to Cloud Run with one-click in the repo above, or use this already deployed endpoint (which is also configured by default in the Apigee proxy that we deployed).</p>
+<p><a href="https://sap-orders-mock-h7pi7igbcq-ew.a.run.app/sap/opu/odata/sap/API_SALES_ORDER_SRV/A_SalesOrder" target="_blank"><code>https://sap-orders-mock-h7pi7igbcq-ew.a.run.app/sap/opu/odata/sap/API_SALES_ORDER_SRV/A_SalesOrder</code></a></p>
+<p>You can verify that the deployment is working by running this command to see sample Sales Order data.</p>
+<pre><code>curl &#34;https://sap-orders-mock-h7pi7igbcq-ew.a.run.app/sap/opu/odata/sap/API_SALES_ORDER_SRV/A_SalesOrder&#34; | json_pp</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Connecting Salesforce Accounts to SAP BusinessPartners" duration="10">
+        <h3 is-upgraded><strong>Add an Apex Class for Accounts</strong></h3>
 <p>Now we are going to configure an <strong>Apex Class</strong> in Salesforce to be triggered when <strong>Accounts</strong> are created in Salesforce through a <strong>Process Builder process</strong>.  This class will call our <strong>Apigee API</strong> with the data, which we will then convert and send to SAP.</p>
 <p>An <strong>Apex Class</strong> is a serverless framework that can be used to execute code logic within the Salesforce environment.  <strong>Apex</strong> is based on Java.  More information can be found <a href="https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_classes_understanding.htm" target="_blank">here</a>.  We are going to be using an <strong>Apex Class</strong> to call our Apigee proxy.</p>
 <p>To add our serverless <strong>Apex Class</strong> go again to the <strong>Salesforce Settings</strong> tab and search in the <strong>Quick Find</strong> for <strong>Apex Classes</strong>.  Click on the <strong>Apex Classes</strong> link.</p>
@@ -118,7 +144,7 @@ public class RestApiCall implements System.Queueable, Database.AllowsCallouts {
     public void execute(System.QueueableContext ctx) {
         // Query necessary Data
         String accountName = this.name[0];
-        String body = &#39;{ &#34;BusinessPartnerCategory&#34;: &#34;2&#34;, &#34;OrganizationBPName1&#34;: &#34;SAP&#34;, &#34;BusinessPartnerFullName&#34;: &#34;&#39; + this.name[0] + &#39;&#34;, &#34;to_BusinessPartnerAddress&#34;: [ { &#34;Country&#34;: &#34;DE&#34;, &#34;StreetName&#34;: &#34;Dietmar-Hopp-Allee 16&#34;, &#34;PostalCode&#34;: &#34;69190&#34;, &#34;CityName&#34;: &#34;Walldorf&#34;, &#34;to_AddressUsage&#34;: [ { &#34;AddressUsage&#34;: &#34;XXDEFAULT&#34; } ] } ], &#34;to_BusinessPartnerTax&#34;: [ { &#34;BPTaxType&#34;: &#34;DE0&#34;, &#34;BPTaxNumber&#34;: &#34;DE034323&#34; } ] }&#39;; //populate body
+        String body = &#39;{ &#34;BusinessPartnerFullName&#34;: &#34;&#39; + this.name[0] + &#39;&#34; }&#39;; //populate body
         Http http = new Http();
         HttpRequest request = new HttpRequest();
         request.setEndpoint(&#39;https://emea-poc13-test.apigee.net/business-objects-api/customers&#39;); 
@@ -153,7 +179,7 @@ public class RestApiCall implements System.Queueable, Database.AllowsCallouts {
                      WHERE Name = :accountName
                      LIMIT 1];
                      
-                accountToUpdate.Description = &#39;SAP Update Error&#39;;
+                accountToUpdate.Description = &#39;13 is an unlucky number, SAP BusinessPartner rejected.&#39;;
                 
                 // Make the update call.
                 update accountToUpdate;
@@ -186,22 +212,14 @@ public class RestApiCall implements System.Queueable, Database.AllowsCallouts {
 <p>Also add an entry to <strong>Set Apex Variables</strong> for <strong>name</strong> as <strong>Field Reference</strong> to the record property <strong>[Account].Name</strong>.  The last field reference can be selected with a field picker.  This simply means that we will pass the newly created <strong>Account Name</strong> to our Apex Class in the <strong>name</strong> variable.</p>
 <p class="image-container"><img style="width: 624.00px" src="img/c9526e2ac806e20f.png"></p>
 <p>After clicking <strong>Save</strong> click on <strong>Activate</strong> in the upper right corner, and after confirming the activation, our process is now listening for newly created <strong>Account</strong> records.</p>
-<h2 is-upgraded><strong>SAP setup</strong></h2>
-<p>For the purpose of this lab, it is easiest to use a SAP Business Partner mock class which allows us to use the OData APIs without an actual SAP system.</p>
-<p><a href="https://sap.github.io/cloud-s4-sdk-book/pages/mock-odata.html" target="_blank"><paper-button class="colored" raised>SAP Business Partner OData Mock NodeJS project</paper-button></a></p>
-<p>This mock is very easy to deploy to Cloud Run, with a sample deployment here that can easily be used in this lab (and is configured by default in the Apigee proxy that we deployed).</p>
-<p><a href="https://sap-s4-mock-h7pi7igbcq-ew.a.run.app/sap/opu/odata/sap/API_BUSINESS_PARTNER/A_BusinessPartner" target="_blank"><code>https://sap-s4-mock-h7pi7igbcq-ew.a.run.app/sap/opu/odata/sap/API_BUSINESS_PARTNER/A_BusinessPartner</code></a></p>
-<p>The mock service just stores the data in memory, so any added records are lost after the Cloud Run instance is killed after around 10 minutes of idle time.  There are 5 records that are always available.</p>
-
-
-      </google-codelab-step>
-    
-      <google-codelab-step label="Test Integration Flow" duration="10">
-        <p>Now that we have all of the pieces setup, we can test the integration flow. </p>
+<h3 is-upgraded>Test Account / BusinessPartner Integration</h3>
+<p>Now that we have all of the pieces setup, we can test the integration flow. </p>
 <p>To start with, let&#39;s test our API to retrieve all current SAP Business Partners.  For this you can use curl, or my favorite API tester <a href="https://chrome.google.com/webstore/detail/talend-api-tester-free-ed/aejoelaoggembcahagimdiliamlcdmfm?hl=en" target="_blank">Talend API Tester</a>.</p>
 <pre><code>curl &#34;https://emea-poc13-test.apigee.net/business-objects-api/customers&#34; | json_pp</code></pre>
 <p>Here are the results in Talend, as you can see we have 5 current partner records.</p>
-<p class="image-container"><img style="width: 624.00px" src="img/c2442a8e095ca9da.png"></p>
+<p class="image-container"><img style="width: 624.00px" src="img/92057fe5b0918c92.png"></p>
+<p>As you can see above, the results are also simplified by the proxy to make the JSON objects more REST resource-conform.  You can see the policy in the Apigee proxy that does this by looking in the <strong>Proxy Endpoint PostFlow</strong>, where a policy <strong>beautify-json.js</strong> is applied to beautify the return object.  You can also disable the policy, and then you will get the raw OData return structures from SAP.</p>
+<p class="image-container"><img style="width: 624.00px" src="img/932c99f91e5e5bf4.png"> </p>
 <p>Go to your <strong>Apigee</strong> tab, make sure our <strong>Business-Objects-API</strong> proxy is opened, and switch to the <strong>Trace</strong> tab on the upper right corner.  Go ahead and start a trace by clicking the green button <strong>Start Trace Session</strong>.</p>
 <p>In a trace session, we will see all of the request and response traces that flow through this API proxy.  Add the path <strong>/health</strong> (so for example a full URL that looks like <a href="https://emea-poc13-test.apigee.net/business-objects-api/health" target="_blank">https://emea-poc13-test.apigee.net/business-objects-api/health</a>) to the URL in the <strong>Send Request</strong> panel and click <strong>Send</strong> to send a test request.  You should see a <strong>200</strong> response.</p>
 <p class="image-container"><img style="width: 624.00px" src="img/dfa3d6130e14434f.png"></p>
@@ -220,13 +238,136 @@ public class RestApiCall implements System.Queueable, Database.AllowsCallouts {
 <p class="image-container"><img style="width: 624.00px" src="img/93530e5f5ec68727.png"></p>
 <p>And now check back in <strong>Salesforce</strong>, and you should see the return <strong>BusinessPartnerUUID</strong> from SAP added in the <strong>Description</strong> field of the <strong>Account</strong> record.</p>
 <p class="image-container"><img style="width: 624.00px" src="img/8310103b32e4ebb1.png"></p>
+<h4 is-upgraded>Test Error Handling</h4>
+<p>A common question is what happens when something goes wrong in the communication?  You can test this here too, just by creating a new <strong>Account</strong> with a name that ends with <strong>13</strong>.  So for example <strong>Company13</strong>.</p>
+<p>You&#39;ll notice that in our Apigee proxy in the Endpoint PreFlow we have an error simulator policy that checks all incoming traffic for names that end in 13, and if so immediately returns a 500 result to the client.  After testing with the <strong>Company13</strong> Account record above, you should also see an error text in the Salesforce Description field with the reason, which could theoretically be corrected (remove the 13!) and resubmitted to the proxy.</p>
+<h3 is-upgraded>Conclusion</h3>
 <p>Congratulations!  You&#39;ve now completed an end-to-end API-First integration between Salesforce and SAP, and have a new REST API that can be further extended with new integrations, unified security like OAuth 2.0 and JWT policies, and traffic shaping to make sure that your backend SAP system isn&#39;t overloaded by all of your new customers.</p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Next Steps" duration="10">
-        <p>Now that you have deployed your API, dive deeper into more features with these tutorials.</p>
+      <google-codelab-step label="Connecting Salesforce Orders to SAP SalesOrders" duration="10">
+        <aside class="warning"><p><strong>Optional:</strong> The Sales Orders functionality here is identical in handling to the Accounts use-case above (just with different source and destination objects), so is optional for completing the lab.</p>
+</aside>
+<p>Now similarly to Accounts we will create an integration between Salesforce Orders and SAP SalesOrders.  This process is the exact same as for Accounts as done above, but just for Order objects and using the orders Apigee API in the same Apigee proxy.</p>
+<h3 is-upgraded><strong>Add an Apex Class for Orders</strong></h3>
+<p>Now we are going to configure an <strong>Apex Class</strong> in Salesforce to be triggered when <strong>Orders</strong> are created in Salesforce through a <strong>Process Builder </strong>process.  This class will call our <strong>Apigee API</strong> with the data, which we will then convert and send to SAP.</p>
+<p>An <strong>Apex Class</strong> is a serverless framework that can be used to execute code logic within the Salesforce environment.  <strong>Apex</strong> is based on Java.  More information can be found <a href="https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_classes_understanding.htm" target="_blank">here</a>.  We are going to be using an <strong>Apex Class</strong> to call our Apigee proxy.</p>
+<p>To add our serverless <strong>Apex Class</strong> go again to the <strong>Salesforce Settings</strong> tab and search in the <strong>Quick Find</strong> for <strong>Apex Classes</strong>.  Click on the <strong>Apex Classes</strong> link.</p>
+<p class="image-container"><img style="width: 624.00px" src="img/3c227f1e7bc75d7.png"></p>
+<p>Click on <strong>New</strong> to add a new class.</p>
+<p>Paste this code into the <strong>Alex Class</strong> editor.  Change the <strong>URL request.setEndpoint(&#39;https://emea-poc13-test.apigee.net/business-objects-api/orders); </strong> in the code to the URL of your Apigee proxy that you deployed in the Apigee setup.</p>
+<pre><code>public inherited sharing class ApigeeOrder {
+@InvocableMethod(label=&#39;Apigee Business Objects Order API&#39; description=&#39;Class to connect to Apigee Business Objects API&#39;)
+public static void invokeAPI(List&lt;String&gt; name) {
+    // Execute Query here
+    System.enqueueJob(new RestApiCall(name));
+}
+
+public class RestApiCall implements System.Queueable, Database.AllowsCallouts {
+    List&lt;String&gt; name = new List&lt;String&gt;();
+    
+    public RestApiCall(List&lt;String&gt; accountName){
+        this.name = accountName ;
+    }
+    public void execute(System.QueueableContext ctx) {
+        // Query necessary Data
+        String orderName = this.name[0];
+        String body = &#39;{ &#34;SalesOrder&#34;: &#34;&#39; + this.name[0] + &#39;&#34;}&#39;; //populate body
+        Http http = new Http();
+        HttpRequest request = new HttpRequest();
+        request.setEndpoint(&#39;https://emea-poc13-test.apigee.net/business-objects-api/orders&#39;); 
+        request.setHeader(&#39;Content-Type&#39;, &#39;application/json;charset=UTF-8&#39;);
+        request.setMethod(&#39;POST&#39;);// could be GET/POST
+        request.setBody(body);// only needed for POST
+        HttpResponse response = http.send(request);      
+        
+        if (response.getStatusCode() == 201) {
+            Map&lt;String, Object&gt; results = (Map&lt;String, Object&gt;) JSON.deserializeUntyped(response.getBody());
+            Order orderToUpdate;
+            try {
+                orderToUpdate= 
+                    [SELECT Description FROM Order
+                     WHERE OrderNumber = :orderName 
+                     LIMIT 1];
+                orderToUpdate.Description = &#39;Requested Delivery Date: &#39; + (String)(results.get(&#39;RequestedDeliveryDate&#39;));
+                
+                // Make the update call.
+                update orderToUpdate;
+                
+            } catch(DmlException e) {
+                System.debug(&#39;An unexpected error has occurred: &#39; + e.getMessage());
+            }
+        }
+        else {
+            Order orderToUpdate;
+            try {
+                orderToUpdate= 
+                    [SELECT Description FROM Order
+                     WHERE OrderNumber = :orderName
+                     LIMIT 1];
+                     
+                orderToUpdate.Description = &#39;SAP Update Error&#39;;
+                
+                // Make the update call.
+                update orderToUpdate;
+                
+            } catch(DmlException e) {
+                System.debug(&#39;An unexpected error has occurred: &#39; + e.getMessage());
+            }       
+        }
+    }
+   }
+}
+
+</code></pre>
+<h3 is-upgraded><strong>Create a Process Builder process for Orders</strong></h3>
+<p>Now we are going to create a process in <strong>Process Builder</strong> to call our <strong>Apex Class</strong> when a new Account is created.  More information on <strong>Process Builder</strong> can be found <a href="https://trailhead.salesforce.com/de/content/learn/modules/business_process_automation/process_builder" target="_blank">here</a>.</p>
+<p>In the <strong>Settings </strong>menu type &#34;<strong>Process Builder&#34;</strong> into the <strong>Quick Find</strong> to link to the <strong>Process Builder</strong> console.</p>
+<p class="image-container"><img style="width: 624.00px" src="img/a52ea5de1dda708b.png"></p>
+<p>Click the <strong>New</strong> button to create a new process.</p>
+<p class="image-container"><img style="width: 624.00px" src="img/9b2bd332c90d1611.png"></p>
+<p>Give the process a name like <strong>Apigee Orders</strong> and click that the process should start when <strong>A record changes</strong>.</p>
+<p class="image-container"><img style="width: 624.00px" src="img/61ca1f9131bbedb6.png"></p>
+<p>Now click the <strong>+ Add Object</strong> box at the top of the designer and select the <strong>Orders</strong> object and that the process should only be started <strong>when a record is created</strong>.</p>
+<p class="image-container"><img style="width: 624.00px" src="img/8c9186a0aed50bfe.png"></p>
+<p>Click <strong>Save</strong>.</p>
+<p>Now click <strong>+ Add Criteria</strong>, add a <strong>Name</strong> like &#34;<strong>True</strong>&#34; and select <strong>No criteria-just execute the actions!</strong></p>
+<p class="image-container"><img style="width: 624.00px" src="img/3ef8030488b49a35.png"></p>
+<p>Click <strong>Save</strong>.</p>
+<p>Now click the <strong>+Add Action</strong> button under <strong>Immediate Actions</strong>.</p>
+<p>Fill in the fields with <strong>Action Type</strong> set to <strong>Apex</strong>, <strong>Action Name</strong> set to <strong>New order</strong> and <strong>Apex Class</strong> set to the Apex Class that we created for orders (Apigee Orders).</p>
+<p>Also add an entry to <strong>Set Apex Variables</strong> for <strong>name</strong> as <strong>Field Reference</strong> to the record property <strong>[Order].OrderNumber</strong>.  The last field reference can be selected with a field picker.  This simply means that we will pass the newly created <strong>Order Number</strong> to our Apex Class in the <strong>name</strong> variable.</p>
+<p>After clicking <strong>Save</strong> click on <strong>Activate</strong> in the upper right corner, and after confirming the activation, our process is now listening for newly created <strong>Account</strong> records.</p>
+<h3 is-upgraded><strong>Test Orders / SalesOrders Integration</strong></h3>
+<p>Now that we have all of the pieces setup, we can test the integration flow. </p>
+<p>To start with, let&#39;s test our API to retrieve all current SAP Business Partners.  For this you can use curl, or my favorite API tester <a href="https://chrome.google.com/webstore/detail/talend-api-tester-free-ed/aejoelaoggembcahagimdiliamlcdmfm?hl=en" target="_blank">Talend API Tester</a>.</p>
+<pre><code>curl &#34;https://emea-poc13-test.apigee.net/business-objects-api/orders&#34; | json_pp</code></pre>
+<p>Here are the results in Talend, as you can see we have 3 current sales order records.</p>
+<p class="image-container"><img style="width: 624.00px" src="img/176b88f07773d4c.png"></p>
+<p>Go to your <strong>Apigee</strong> tab, make sure our <strong>Business-Objects-API</strong> proxy is opened, and switch to the <strong>Trace</strong> tab on the upper right corner.  Go ahead and start a trace by clicking the green button <strong>Start Trace Session</strong>.</p>
+<p>In a trace session, we will see all of the request and response traces that flow through this API proxy.  Add the path <strong>/health</strong> (so for example a full URL that looks like <a href="https://emea-poc13-test.apigee.net/business-objects-api/health" target="_blank">https://emea-poc13-test.apigee.net/business-objects-api/health</a>) to the URL in the <strong>Send Request</strong> panel and click <strong>Send</strong> to send a test request.  You should see a <strong>200</strong> response.</p>
+<p class="image-container"><img style="width: 624.00px" src="img/dfa3d6130e14434f.png"></p>
+<p>Now that our trace session is running, we can create a new <strong>Order</strong> record in Salesforce, and watch it flow through the API into our SAP backend.</p>
+<ol type="1" start="5">
+<li>Go to <strong>Salesforce</strong>, open the<strong> Sales Console</strong>, and then the <strong>Orders</strong> page.</li>
+<li>Click the <strong>New</strong> button in the upper right corner.</li>
+<li>Select an existing account and create a new contract if necessary to save the <strong>Order</strong>.</li>
+<li>Click <strong>Save</strong></li>
+</ol>
+<p>Now check your Apigee trace window, you should see a successful <strong>201</strong> call with a very simple input payload, and much larger return payload.</p>
+<p>And now return to your curl or Talend API tester, and re-run the GET command to see all business partners.</p>
+<pre><code>curl &#34;https://emea-poc13-test.apigee.net/business-objects-api/orders&#34; | json_pp</code></pre>
+<p>Now you should see 4 results, including your <strong>&#34;new order&#34;</strong> in the last row.</p>
+<p>And now check back in <strong>Salesforce</strong>, and you should see data returned from SAP added to the Description field.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Next Steps" duration="5">
+        <p>Congratulations!  You&#39;ve now completed an end-to-end API-First integration between Salesforce and SAP, and have a new REST API that can be further extended with new integrations, new unified security like OAuth 2.0 and JWT policies, and traffic shaping to make sure that your backend SAP system isn&#39;t overloaded by all of your new customers and sales orders.</p>
+<p>Now that you have deployed your API, dive deeper into more features with these tutorials.</p>
 <p><a href="https://cloud.google.com/apigee/docs/api-platform/get-started/tutorials" target="_blank"><paper-button class="colored" raised>Apigee Tutorials</paper-button></a></p>
 
 
@@ -239,7 +380,6 @@ public class RestApiCall implements System.Queueable, Database.AllowsCallouts {
   <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
   <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
   <script src="//support.google.com/inapp/api.js"></script>
-
   <script>
     // This is to override the X / close handling on the page, unfortunately default handling
     // is not wanted and now way to change, see this issue for more info:
@@ -255,6 +395,5 @@ public class RestApiCall implements System.Queueable, Database.AllowsCallouts {
       //document.getElementById("arrow-back").style.cursor="default";
     }, false);
   </script>
-
 </body>
 </html>

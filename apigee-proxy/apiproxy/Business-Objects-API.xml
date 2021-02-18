@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<APIProxy revision="1" name="Business-Objects-API">
+<APIProxy revision="2" name="Business-Objects-API">
     <Basepaths>/customers</Basepaths>
     <ConfigurationVersion majorVersion="4" minorVersion="0"/>
     <CreatedAt>1613020216670</CreatedAt>
     <CreatedBy>defaultUser</CreatedBy>
     <Description></Description>
     <DisplayName>Business Objects API</DisplayName>
-    <LastModifiedAt>1613138358280</LastModifiedAt>
+    <LastModifiedAt>1613661144177</LastModifiedAt>
     <LastModifiedBy>defaultUser</LastModifiedBy>
-    <ManifestVersion>SHA-512:a40e42d121c987b3d2830378a5f90406b38007cc1b39e7ef1b01fa760d4a50445527f4398361dbf1684c624d6fcf6cd8d4d7e484413838d4c2fac252d4c8ff15:eu-west-1</ManifestVersion>
+    <ManifestVersion>SHA-512:ef65a353ab9660e3b3b1082070318ce4a1e7b8b6b44934b1d1fac706fbe28950f95214cd362798dab270ffe3ffcb20315bbcb1500a0850b6885a1aef0cb9cf1b:eu-west-1</ManifestVersion>
     <Policies>
         <Policy>Get-Name</Policy>
         <Policy>Prevent-URL-copy</Policy>
@@ -27,5 +27,6 @@
     <TargetServers/>
     <TargetEndpoints>
         <TargetEndpoint>SAP Business Partner OData API</TargetEndpoint>
+        <TargetEndpoint>SAP Sales Orders REST API</TargetEndpoint>
     </TargetEndpoints>
 </APIProxy>

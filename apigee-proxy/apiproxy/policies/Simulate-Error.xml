@@ -5,7 +5,7 @@
     <FaultResponse>
         <Set>
             <Headers/>
-            <Payload contentType="text/plain"> </Payload>
+            <Payload contentType="text/plain"/>
             <StatusCode>500</StatusCode>
             <ReasonPhrase>Server Error</ReasonPhrase>
         </Set>

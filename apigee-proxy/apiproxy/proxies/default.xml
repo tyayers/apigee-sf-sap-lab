@@ -17,13 +17,13 @@
             <Description/>
             <Request/>
             <Response/>
-            <Condition>(proxy.pathsuffix MatchesPath "/customers") and (request.verb = "POST")</Condition>
+            <Condition>(proxy.pathsuffix MatchesPath "/customers") and (request.verb = "POST" or request.verb = "GET")</Condition>
         </Flow>
         <Flow name="orders">
             <Description/>
             <Request/>
             <Response/>
-            <Condition>(proxy.pathsuffix MatchesPath "/orders") and (request.verb = "POST")</Condition>
+            <Condition>(proxy.pathsuffix MatchesPath "/orders") and (request.verb = "POST" or request.verb = "GET")</Condition>
         </Flow>
         <Flow name="health">
             <Description/>
@@ -54,5 +54,9 @@
     <RouteRule name="sap-business-partner">
         <Condition>(proxy.pathsuffix MatchesPath "/customers")</Condition>
         <TargetEndpoint>SAP Business Partner OData API</TargetEndpoint>
+    </RouteRule>
+    <RouteRule name="orders">
+        <Condition>(proxy.pathsuffix MatchesPath "/orders")</Condition>
+        <TargetEndpoint>SAP Sales Orders REST API</TargetEndpoint>
     </RouteRule>
 </ProxyEndpoint>
