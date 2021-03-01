@@ -66,36 +66,33 @@
 <p>We will be importing a proxy bundle for our API between Salesforce and SAP.  Download this Apigee proxy bundle ZIP file from Github to get started.</p>
 <p><a href="https://github.com/tyayers/apigee-sf-sap-lab/releases/download/2.0/Business-Objects-API_rev2_2021_02_18.zip" target="_blank"><paper-button class="colored" raised><iron-icon icon="file-download"></iron-icon>Download Business Objects proxy bundle</paper-button></a></p>
 <p>Now login to your Apigee account, go to the API Proxies page, and click the<strong> &#34;+Proxy&#34;</strong> button in the upper right corner.</p>
-<p class="image-container"><img style="width: 624.00px" src="img/c7454dee1c177f11.png"></p>
+<p class="image-container"><img style="width: 284.00px" src="img/f8c003b5ce2c0b55.png"></p>
 <p>Now click on<strong> &#34;Upload proxy bundle&#34;</strong> to upload the Apigee proxy bundle ZIP file that we downloaded in the previous step.</p>
-<p class="image-container"><img style="width: 624.00px" src="img/f644d9e9ac52234f.png"></p>
+<p class="image-container"><img style="width: 593.00px" src="img/a1f81c93fa30482a.png"></p>
 <p>Click <strong>&#34;Create&#34;</strong> to go ahead and create the proxy.</p>
 <p>After creating, click on <strong>&#34;Edit proxy&#34;</strong> to go to the proxy overview page.  Click on <strong>&#34;Deployment-&gt;test&#34;</strong> to deploy the proxy to your test environment (if you don&#39;t have a test environment, simply deploy it to any environment that you want to use - it doesn&#39;t have to be &#34;test&#34;).</p>
 <p>After deploying, you should see the successful deployment under <strong>Deployments</strong>.  </p>
-<p class="image-container"><img style="width: 624.00px" src="img/da2f510a970cc500.png"></p>
+<p class="image-container"><img style="width: 624.00px" src="img/83aba48f0534bff7.png"></p>
 <p>Copy the URL displayed under Deployments - we will use this later to configure the API endpoint from Salesforce.  In the image above it is: <strong>https://emea-poc13-test.apigee.net/business-objects-api</strong></p>
 <p>You can also test the API under the <strong>&#34;Trace&#34;</strong> tab in the upper-right corner of the Proxy Overview page.  If you start a trace session, and call the <strong>/health</strong> endpoint, you should get a <strong>200</strong> response with a <strong>Response Content</strong> of {&#34;status&#34;:&#34;UP&#34;}.</p>
-<p class="image-container"><img style="width: 624.00px" src="img/51331f0d5b8ed86b.png"></p>
+<p class="image-container"><img style="width: 624.00px" src="img/f03567544378aeed.png"></p>
 <p>Congratulations!  You now have a proxy up and running that can receive requests from Salesforce or any other client that wants to work with business object data.</p>
 <h2 is-upgraded><strong>Salesforce setup</strong></h2>
 <p>Salesforce provides a variety of ways to get a test sandbox environment of Salesforce with test data.  If you have a developer account you can use your own sandbox, or create a free one here.</p>
 <p><a href="https://www.salesforce.com/form/signup/freetrial-platform/" target="_blank"><paper-button class="colored" raised>Register for a free Salesforce sandbox</paper-button></a></p>
 <aside class="warning"><p><strong>Note:</strong> The free sandbox created above will only have a lifespan of 12 hours, after that you will have to move to a real developer sandbox or simply recreate it for further tests.</p>
 </aside>
-<aside class="warning"><p><strong>Caution:</strong> Sometimes the Salesforce deployment will show an error <strong>&#34;A Component Error has occurred!  [Cannot read property ‘0&#39; of undefined]&#34;</strong>.  Just click to close the message, it doesn&#39;t appear to affect this lab.</p>
-<p class="image-container"><img style="width: 352.72px" src="img/2d2e47c872745de8.png"></p>
-</aside>
 <h2 is-upgraded><strong>Configure Salesforce</strong></h2>
 <p>Now let&#39;s configure our Salesforce environment.</p>
 <h3 is-upgraded><strong>Add Remote Site configuration</strong></h3>
 <p>Here we are going to configure your Apigee proxy as an allowed Remote Site for your Salesforce instance to connect to.  More information on <strong>Remote Site Settings</strong> can be found <a href="https://help.salesforce.com/articleView?id=sf.configuring_remoteproxy.htm&type=5" target="_blank">here</a>.</p>
 <p>Start by clicking the <strong>Gear Icon</strong> in the upper right corner, and clicking on <strong>Setup (Setup for the current app)</strong>.</p>
-<p class="image-container"><img style="width: 624.00px" src="img/c9139c344e1e49cd.png"></p>
+<p class="image-container"><img style="width: 474.00px" src="img/5a801b3d092846e5.png"></p>
 <p>This should open the <strong>SETUP</strong> console in a new tab.  Type &#34;<strong>Remote Site&#34;</strong> into the <strong>Quick FInd</strong> box to find the <strong>Remote Site Settings</strong>.</p>
-<p class="image-container"><img style="width: 624.00px" src="img/4dcf35fd2342865c.png"></p>
+<p class="image-container"><img style="width: 398.00px" src="img/10b2f16ed23b501b.png"></p>
 <p>Click on the <strong>Remote Site Settings</strong> link.  Here we can add remote sites to our sandbox that we are allowed to call from process or flows in Salesforce.</p>
 <p>Click on the <strong>New Remote Site</strong> button and add the <strong>base URL</strong> of our Apigee proxy that we imported in the previous section.  For my proxy, the base URL is <strong>&#34;</strong><a href="https://emea-poc13-test.apigee.net" target="_blank"><strong>https://emea-poc13-test.apigee.net</strong></a><strong>&#34;</strong>.</p>
-<p class="image-container"><img style="width: 624.00px" src="img/386f854c28135174.png"></p>
+<p class="image-container"><img style="width: 624.00px" src="img/e93da7cb57c278dc.png"></p>
 <p>Click <strong>Save</strong>.</p>
 <h2 is-upgraded><strong>SAP setup</strong></h2>
 <p>For the purpose of this lab, it is easiest to use a SAP Business Partner mock class which allows us to use the OData APIs without an actual SAP system.  Here we have two mock classes, one for BusinessPartners and one for SalesOrders.</p>
@@ -125,9 +122,9 @@
 <p>Now we are going to configure an <strong>Apex Class</strong> in Salesforce to be triggered when <strong>Accounts</strong> are created in Salesforce through a <strong>Process Builder process</strong>.  This class will call our <strong>Apigee API</strong> with the data, which we will then convert and send to SAP.</p>
 <p>An <strong>Apex Class</strong> is a serverless framework that can be used to execute code logic within the Salesforce environment.  <strong>Apex</strong> is based on Java.  More information can be found <a href="https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_classes_understanding.htm" target="_blank">here</a>.  We are going to be using an <strong>Apex Class</strong> to call our Apigee proxy.</p>
 <p>To add our serverless <strong>Apex Class</strong> go again to the <strong>Salesforce Settings</strong> tab and search in the <strong>Quick Find</strong> for <strong>Apex Classes</strong>.  Click on the <strong>Apex Classes</strong> link.</p>
-<p class="image-container"><img style="width: 624.00px" src="img/3c227f1e7bc75d7.png"></p>
+<p class="image-container"><img style="width: 624.00px" src="img/840139c6505931a1.png"></p>
 <p>Click on <strong>New</strong> to add a new class.</p>
-<p>Paste this code into the <strong>Alex Class</strong> editor.  Change the <strong>URL request.setEndpoint(&#39;https://emea-poc13-test.apigee.net/business-objects-api/customers&#39;); </strong> in the code to the URL of your Apigee proxy that you deployed in the Apigee setup.</p>
+<p>Paste this code into the <strong>Apex Class</strong> editor.  Change the <strong>URL request.setEndpoint(&#39;https://emea-poc13-test.apigee.net/business-objects-api/customers&#39;); </strong> in the code to the URL of your Apigee proxy that you deployed in the Apigee setup.</p>
 <pre><code>public inherited sharing class ApigeeCustomer {
 @InvocableMethod(label=&#39;Apigee Business Objects Customer API&#39; description=&#39;Class to connect to Apigee Business Objects API&#39;)
 public static void invokeAPI(List&lt;String&gt; name) {
@@ -162,7 +159,7 @@ public class RestApiCall implements System.Queueable, Database.AllowsCallouts {
                      WHERE Name = :accountName
                      LIMIT 1];
                 // Update the billing city.
-                accountToUpdate.Description = &#39;SAP Business Partner UUID: &#39; + (String)((Map&lt;String, Object&gt;)results.get(&#39;d&#39;)).get(&#39;BusinessPartnerUUID&#39;);
+                accountToUpdate.Description = &#39;SAP Business Partner UUID: &#39; + (String)results.get(&#39;BusinessPartnerUUID&#39;);
                 
                 // Make the update call.
                 update accountToUpdate;
@@ -196,16 +193,16 @@ public class RestApiCall implements System.Queueable, Database.AllowsCallouts {
 <h3 is-upgraded><strong>Create a Process Builder process for Accounts</strong></h3>
 <p>Now we are going to create a process in <strong>Process Builder</strong> to call our <strong>Apex Class</strong> when a new Account is created.  More information on <strong>Process Builder</strong> can be found <a href="https://trailhead.salesforce.com/de/content/learn/modules/business_process_automation/process_builder" target="_blank">here</a>.</p>
 <p>In the <strong>Settings </strong>menu type &#34;<strong>Process Builder&#34;</strong> into the <strong>Quick Find</strong> to link to the <strong>Process Builder</strong> console.</p>
-<p class="image-container"><img style="width: 624.00px" src="img/a52ea5de1dda708b.png"></p>
+<p class="image-container"><img style="width: 404.00px" src="img/daa4fe8a8685ed0a.png"></p>
 <p>Click the <strong>New</strong> button to create a new process.</p>
-<p class="image-container"><img style="width: 624.00px" src="img/9b2bd332c90d1611.png"></p>
+<p class="image-container"><img style="width: 505.00px" src="img/6804d73847938429.png"></p>
 <p>Give the process a name like <strong>Apigee Customer</strong> and click that the process should start when <strong>A record changes</strong>.</p>
-<p class="image-container"><img style="width: 624.00px" src="img/61ca1f9131bbedb6.png"></p>
+<p class="image-container"><img style="width: 624.00px" src="img/16be1972ab8b5567.png"></p>
 <p>Now click the <strong>+ Add Object</strong> box at the top of the designer and select the <strong>Account</strong> object and and that the process should only be started <strong>when a record is created</strong>.</p>
-<p class="image-container"><img style="width: 624.00px" src="img/8c9186a0aed50bfe.png"></p>
+<p class="image-container"><img style="width: 624.00px" src="img/3098e60787714fd6.png"></p>
 <p>Click <strong>Save</strong>.</p>
 <p>Now click <strong>+ Add Criteria</strong>, add a <strong>Name</strong> like &#34;<strong>True</strong>&#34; and select <strong>No criteria-just execute the actions!</strong></p>
-<p class="image-container"><img style="width: 624.00px" src="img/3ef8030488b49a35.png"></p>
+<p class="image-container"><img style="width: 624.00px" src="img/bac8f0d38c69fb10.png"></p>
 <p>Click <strong>Save</strong>.</p>
 <p>Now click the <strong>+Add Action</strong> button under <strong>Immediate Actions</strong>.</p>
 <p>Fill in the fields with <strong>Action Type</strong> set to <strong>Apex</strong>, <strong>Action Name</strong> set to <strong>New customer</strong> and <strong>Apex Class</strong> set to the Apex Class that we created in the previous step.</p>
@@ -325,16 +322,16 @@ public class RestApiCall implements System.Queueable, Database.AllowsCallouts {
 <h3 is-upgraded><strong>Create a Process Builder process for Orders</strong></h3>
 <p>Now we are going to create a process in <strong>Process Builder</strong> to call our <strong>Apex Class</strong> when a new Account is created.  More information on <strong>Process Builder</strong> can be found <a href="https://trailhead.salesforce.com/de/content/learn/modules/business_process_automation/process_builder" target="_blank">here</a>.</p>
 <p>In the <strong>Settings </strong>menu type &#34;<strong>Process Builder&#34;</strong> into the <strong>Quick Find</strong> to link to the <strong>Process Builder</strong> console.</p>
-<p class="image-container"><img style="width: 624.00px" src="img/a52ea5de1dda708b.png"></p>
+<p class="image-container"><img style="width: 404.00px" src="img/daa4fe8a8685ed0a.png"></p>
 <p>Click the <strong>New</strong> button to create a new process.</p>
-<p class="image-container"><img style="width: 624.00px" src="img/9b2bd332c90d1611.png"></p>
+<p class="image-container"><img style="width: 505.00px" src="img/6804d73847938429.png"></p>
 <p>Give the process a name like <strong>Apigee Orders</strong> and click that the process should start when <strong>A record changes</strong>.</p>
-<p class="image-container"><img style="width: 624.00px" src="img/61ca1f9131bbedb6.png"></p>
+<p class="image-container"><img style="width: 624.00px" src="img/425f4acaec0b9abd.png"></p>
 <p>Now click the <strong>+ Add Object</strong> box at the top of the designer and select the <strong>Orders</strong> object and that the process should only be started <strong>when a record is created</strong>.</p>
-<p class="image-container"><img style="width: 624.00px" src="img/8c9186a0aed50bfe.png"></p>
+<p class="image-container"><img style="width: 624.00px" src="img/3098e60787714fd6.png"></p>
 <p>Click <strong>Save</strong>.</p>
 <p>Now click <strong>+ Add Criteria</strong>, add a <strong>Name</strong> like &#34;<strong>True</strong>&#34; and select <strong>No criteria-just execute the actions!</strong></p>
-<p class="image-container"><img style="width: 624.00px" src="img/3ef8030488b49a35.png"></p>
+<p class="image-container"><img style="width: 624.00px" src="img/bac8f0d38c69fb10.png"></p>
 <p>Click <strong>Save</strong>.</p>
 <p>Now click the <strong>+Add Action</strong> button under <strong>Immediate Actions</strong>.</p>
 <p>Fill in the fields with <strong>Action Type</strong> set to <strong>Apex</strong>, <strong>Action Name</strong> set to <strong>New order</strong> and <strong>Apex Class</strong> set to the Apex Class that we created for orders (Apigee Orders).</p>
@@ -348,7 +345,7 @@ public class RestApiCall implements System.Queueable, Database.AllowsCallouts {
 <p class="image-container"><img style="width: 624.00px" src="img/176b88f07773d4c.png"></p>
 <p>Go to your <strong>Apigee</strong> tab, make sure our <strong>Business-Objects-API</strong> proxy is opened, and switch to the <strong>Trace</strong> tab on the upper right corner.  Go ahead and start a trace by clicking the green button <strong>Start Trace Session</strong>.</p>
 <p>In a trace session, we will see all of the request and response traces that flow through this API proxy.  Add the path <strong>/health</strong> (so for example a full URL that looks like <a href="https://emea-poc13-test.apigee.net/business-objects-api/health" target="_blank">https://emea-poc13-test.apigee.net/business-objects-api/health</a>) to the URL in the <strong>Send Request</strong> panel and click <strong>Send</strong> to send a test request.  You should see a <strong>200</strong> response.</p>
-<p class="image-container"><img style="width: 624.00px" src="img/dfa3d6130e14434f.png"></p>
+<p class="image-container"><img style="width: 624.00px" src="img/7480363d4b9843d4.png"></p>
 <p>Now that our trace session is running, we can create a new <strong>Order</strong> record in Salesforce, and watch it flow through the API into our SAP backend.</p>
 <ol type="1" start="5">
 <li>Go to <strong>Salesforce</strong>, open the<strong> Sales Console</strong>, and then the <strong>Orders</strong> page.</li>
@@ -380,20 +377,6 @@ public class RestApiCall implements System.Queueable, Database.AllowsCallouts {
   <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
   <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
   <script src="//support.google.com/inapp/api.js"></script>
-  <script>
-    // This is to override the X / close handling on the page, unfortunately default handling
-    // is not wanted and now way to change, see this issue for more info:
-    // https://github.com/googlecodelabs/tools/issues/103
-    document.addEventListener('DOMContentLoaded', function() {
-      document.getElementById("arrow-back").href="#"; 
 
-      document.getElementById("arrow-back").addEventListener( 'click', function() { 
-        window.history.back();
-      }); 
-      //document.getElementById("arrow-back").style.display = "none";
-      //document.getElementById("arrow-back").style.pointerEvents="none";
-      //document.getElementById("arrow-back").style.cursor="default";
-    }, false);
-  </script>
 </body>
 </html>
