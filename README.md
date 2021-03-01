@@ -2,8 +2,8 @@
 
 This lab shows how to integrate complex systems using an **API-First** approach, utilizing easy-to-consume API facades in Apigee API Management to connect to a backend SAP interface.  This makes the integration much easier for frontend systems like Salesforce and other apps and services needing to integrate with backend data.
 
-## [Start the lab](https://tyayers.github.io/apigee-sf-sap-lab)
-[<img src="img/cover.png" />](https://tyayers.github.io/apigee-sf-sap-lab)
+## [Start the lab](https://tyayers.github.io/apigee-sfdx-sap-lab)
+[<img src="img/cover.png" />](https://tyayers.github.io/apigee-sfdx-sap-lab)
 
 ## Background
 
