@@ -48,7 +48,8 @@
                 ecosystem apps, with access managed through a developer portal.</p>
             <p>This approach can be generalized and applied to all integrations with backend systems - an
                 <strong>API-First </strong>approach to integration is a great strategy to gain more freedom and reduce
-                sticky dependencies in your service and app landscape.</p>
+                sticky dependencies in your service and app landscape.
+            </p>
             <p class="image-container"><img style="width: 624.00px" src="img/6022ea78aecf80e1.png"></p>
             <h2 is-upgraded><strong>What you&#39;ll build</strong></h2>
             <p>In this lab, you will connect a Salesforce sandbox environment to a REST API in Apigee that integrates
@@ -105,12 +106,14 @@
             <p>After creating, click on <strong>&#34;Edit proxy&#34;</strong> to go to the proxy overview page. Click on
                 <strong>&#34;Deployment-&gt;test&#34;</strong> to deploy the proxy to your test environment (if you
                 don&#39;t have a test environment, simply deploy it to any environment that you want to use - it
-                doesn&#39;t have to be &#34;test&#34;).</p>
+                doesn&#39;t have to be &#34;test&#34;).
+            </p>
             <p>After deploying, you should see the successful deployment under <strong>Deployments</strong>. </p>
             <p class="image-container"><img style="width: 624.00px" src="img/83aba48f0534bff7.png"></p>
             <p>Copy the URL displayed under Deployments - we will use this later to configure the API endpoint from
                 Salesforce. In the image above it is:
-                <strong>https://emea-poc13-test.apigee.net/business-objects-api</strong></p>
+                <strong>https://emea-poc13-test.apigee.net/business-objects-api</strong>
+            </p>
             <p>You can also test the API under the <strong>&#34;Trace&#34;</strong> tab in the upper-right corner of the
                 Proxy Overview page. If you start a trace session, and call the <strong>/health</strong> endpoint, you
                 should get a <strong>200</strong> response with a <strong>Response Content</strong> of
@@ -197,7 +200,8 @@
             <p>Now we are going to configure an <strong>Apex Class</strong> in Salesforce to be triggered when
                 <strong>Accounts</strong> are created in Salesforce through a <strong>Process Builder process</strong>.
                 This class will call our <strong>Apigee API</strong> with the data, which we will then convert and send
-                to SAP.</p>
+                to SAP.
+            </p>
             <p>An <strong>Apex Class</strong> is a serverless framework that can be used to execute code logic within
                 the Salesforce environment. <strong>Apex</strong> is based on Java. More information can be found <a
                     href="https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_classes_understanding.htm"
@@ -205,7 +209,8 @@
                 proxy.</p>
             <p>To add our serverless <strong>Apex Class</strong> go again to the <strong>Salesforce Settings</strong>
                 tab and search in the <strong>Quick Find</strong> for <strong>Apex Classes</strong>. Click on the
-                <strong>Apex Classes</strong> link.</p>
+                <strong>Apex Classes</strong> link.
+            </p>
             <p class="image-container"><img style="width: 624.00px" src="img/840139c6505931a1.png"></p>
             <p>Click on <strong>New</strong> to add a new class.</p>
             <p>Paste this code into the <strong>Apex Class</strong> editor. Change the <strong>URL
@@ -283,7 +288,8 @@ public class RestApiCall implements System.Queueable, Database.AllowsCallouts {
                     href="https://trailhead.salesforce.com/de/content/learn/modules/business_process_automation/process_builder"
                     target="_blank">here</a>.</p>
             <p>In the <strong>Settings </strong>menu type &#34;<strong>Process Builder&#34;</strong> into the
-                <strong>Quick Find</strong> to link to the <strong>Process Builder</strong> console.</p>
+                <strong>Quick Find</strong> to link to the <strong>Process Builder</strong> console.
+            </p>
             <p class="image-container"><img style="width: 404.00px" src="img/daa4fe8a8685ed0a.png"></p>
             <p>Click the <strong>New</strong> button to create a new process.</p>
             <p class="image-container"><img style="width: 505.00px" src="img/6804d73847938429.png"></p>
@@ -292,7 +298,8 @@ public class RestApiCall implements System.Queueable, Database.AllowsCallouts {
             <p class="image-container"><img style="width: 624.00px" src="img/16be1972ab8b5567.png"></p>
             <p>Now click the <strong>+ Add Object</strong> box at the top of the designer and select the
                 <strong>Account</strong> object and and that the process should only be started <strong>when a record is
-                    created</strong>.</p>
+                    created</strong>.
+            </p>
             <p class="image-container"><img style="width: 624.00px" src="img/3098e60787714fd6.png"></p>
             <p>Click <strong>Save</strong>.</p>
             <p>Now click <strong>+ Add Criteria</strong>, add a <strong>Name</strong> like
@@ -306,7 +313,8 @@ public class RestApiCall implements System.Queueable, Database.AllowsCallouts {
             <p>Also add an entry to <strong>Set Apex Variables</strong> for <strong>name</strong> as <strong>Field
                     Reference</strong> to the record property <strong>[Account].Name</strong>. The last field reference
                 can be selected with a field picker. This simply means that we will pass the newly created
-                <strong>Account Name</strong> to our Apex Class in the <strong>name</strong> variable.</p>
+                <strong>Account Name</strong> to our Apex Class in the <strong>name</strong> variable.
+            </p>
             <p class="image-container"><img style="width: 624.00px" src="img/c9526e2ac806e20f.png"></p>
             <p>After clicking <strong>Save</strong> click on <strong>Activate</strong> in the upper right corner, and
                 after confirming the activation, our process is now listening for newly created <strong>Account</strong>
@@ -324,7 +332,8 @@ public class RestApiCall implements System.Queueable, Database.AllowsCallouts {
                 resource-conform. You can see the policy in the Apigee proxy that does this by looking in the
                 <strong>Proxy Endpoint PostFlow</strong>, where a policy <strong>beautify-json.js</strong> is applied to
                 beautify the return object. You can also disable the policy, and then you will get the raw OData return
-                structures from SAP.</p>
+                structures from SAP.
+            </p>
             <p class="image-container"><img style="width: 624.00px" src="img/932c99f91e5e5bf4.png"> </p>
             <p>Go to your <strong>Apigee</strong> tab, make sure our <strong>Business-Objects-API</strong> proxy is
                 opened, and switch to the <strong>Trace</strong> tab on the upper right corner. Go ahead and start a
@@ -340,7 +349,8 @@ public class RestApiCall implements System.Queueable, Database.AllowsCallouts {
                 and watch it flow through the API into our SAP backend.</p>
             <ol type="1" start="1">
                 <li>Go to <strong>Salesforce</strong>, open the<strong> Sales Console</strong>, and then the
-                    <strong>Accounts</strong> page.</li>
+                    <strong>Accounts</strong> page.
+                </li>
                 <li>Click the <strong>New</strong> button in the upper right corner.</li>
                 <li>Give the Account a name like &#34;<strong>New business partner 1</strong>&#34;</li>
                 <li>Click <strong>Save</strong></li>
@@ -356,7 +366,8 @@ public class RestApiCall implements System.Queueable, Database.AllowsCallouts {
             <p class="image-container"><img style="width: 624.00px" src="img/93530e5f5ec68727.png"></p>
             <p>And now check back in <strong>Salesforce</strong>, and you should see the return
                 <strong>BusinessPartnerUUID</strong> from SAP added in the <strong>Description</strong> field of the
-                <strong>Account</strong> record.</p>
+                <strong>Account</strong> record.
+            </p>
             <p class="image-container"><img style="width: 624.00px" src="img/8310103b32e4ebb1.png"></p>
             <h4 is-upgraded>Test Error Handling</h4>
             <p>A common question is what happens when something goes wrong in the communication? You can test this here
@@ -389,7 +400,8 @@ public class RestApiCall implements System.Queueable, Database.AllowsCallouts {
             <p>Now we are going to configure an <strong>Apex Class</strong> in Salesforce to be triggered when
                 <strong>Orders</strong> are created in Salesforce through a <strong>Process Builder </strong>process.
                 This class will call our <strong>Apigee API</strong> with the data, which we will then convert and send
-                to SAP.</p>
+                to SAP.
+            </p>
             <p>An <strong>Apex Class</strong> is a serverless framework that can be used to execute code logic within
                 the Salesforce environment. <strong>Apex</strong> is based on Java. More information can be found <a
                     href="https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_classes_understanding.htm"
@@ -397,7 +409,8 @@ public class RestApiCall implements System.Queueable, Database.AllowsCallouts {
                 proxy.</p>
             <p>To add our serverless <strong>Apex Class</strong> go again to the <strong>Salesforce Settings</strong>
                 tab and search in the <strong>Quick Find</strong> for <strong>Apex Classes</strong>. Click on the
-                <strong>Apex Classes</strong> link.</p>
+                <strong>Apex Classes</strong> link.
+            </p>
             <p class="image-container"><img style="width: 624.00px" src="img/3c227f1e7bc75d7.png"></p>
             <p>Click on <strong>New</strong> to add a new class.</p>
             <p>Paste this code into the <strong>Apex Class</strong> editor. Change the <strong>URL
@@ -474,16 +487,19 @@ public class RestApiCall implements System.Queueable, Database.AllowsCallouts {
                     href="https://trailhead.salesforce.com/de/content/learn/modules/business_process_automation/process_builder"
                     target="_blank">here</a>.</p>
             <p>In the <strong>Settings </strong>menu type &#34;<strong>Process Builder&#34;</strong> into the
-                <strong>Quick Find</strong> to link to the <strong>Process Builder</strong> console.</p>
+                <strong>Quick Find</strong> to link to the <strong>Process Builder</strong> console.
+            </p>
             <p class="image-container"><img style="width: 404.00px" src="img/daa4fe8a8685ed0a.png"></p>
             <p>Click the <strong>New</strong> button to create a new process.</p>
             <p class="image-container"><img style="width: 505.00px" src="img/6804d73847938429.png"></p>
             <p>Give the process a name like <strong>Apigee Orders</strong> and click that the process should start when
-                <strong>A record changes</strong>.</p>
+                <strong>A record changes</strong>.
+            </p>
             <p class="image-container"><img style="width: 624.00px" src="img/425f4acaec0b9abd.png"></p>
             <p>Now click the <strong>+ Add Object</strong> box at the top of the designer and select the
                 <strong>Orders</strong> object and that the process should only be started <strong>when a record is
-                    created</strong>.</p>
+                    created</strong>.
+            </p>
             <p class="image-container"><img style="width: 624.00px" src="img/3098e60787714fd6.png"></p>
             <p>Click <strong>Save</strong>.</p>
             <p>Now click <strong>+ Add Criteria</strong>, add a <strong>Name</strong> like
@@ -497,13 +513,14 @@ public class RestApiCall implements System.Queueable, Database.AllowsCallouts {
             <p>Also add an entry to <strong>Set Apex Variables</strong> for <strong>name</strong> as <strong>Field
                     Reference</strong> to the record property <strong>[Order].OrderNumber</strong>. The last field
                 reference can be selected with a field picker. This simply means that we will pass the newly created
-                <strong>Order Number</strong> to our Apex Class in the <strong>name</strong> variable.</p>
+                <strong>Order Number</strong> to our Apex Class in the <strong>name</strong> variable.
+            </p>
             <p>After clicking <strong>Save</strong> click on <strong>Activate</strong> in the upper right corner, and
                 after confirming the activation, our process is now listening for newly created <strong>Account</strong>
                 records.</p>
             <h3 is-upgraded><strong>Test Orders / SalesOrders Integration</strong></h3>
             <p>Now that we have all of the pieces setup, we can test the integration flow. </p>
-            <p>To start with, let&#39;s test our API to retrieve all current SAP Business Partners. For this you can use
+            <p>To start with, let&#39;s test our API to retrieve all current SAP Sales Orders. For this you can use
                 curl, or my favorite API tester <a
                     href="https://chrome.google.com/webstore/detail/talend-api-tester-free-ed/aejoelaoggembcahagimdiliamlcdmfm?hl=en"
                     target="_blank">Talend API Tester</a>.</p>
@@ -524,18 +541,19 @@ public class RestApiCall implements System.Queueable, Database.AllowsCallouts {
                 and watch it flow through the API into our SAP backend.</p>
             <ol type="1" start="5">
                 <li>Go to <strong>Salesforce</strong>, open the<strong> Sales Console</strong>, and then the
-                    <strong>Orders</strong> page.</li>
+                    <strong>Orders</strong> page.
+                </li>
                 <li>Click the <strong>New</strong> button in the upper right corner.</li>
                 <li>Select an existing account and create a new contract if necessary to save the
-                    <strong>Order</strong>.</li>
+                    <strong>Order</strong>.
+                </li>
                 <li>Click <strong>Save</strong></li>
             </ol>
             <p>Now check your Apigee trace window, you should see a successful <strong>201</strong> call with a very
                 simple input payload, and much larger return payload.</p>
-            <p>And now return to your curl or Talend API tester, and re-run the GET command to see all business
-                partners.</p>
+            <p>And now return to your curl or Talend API tester, and re-run the GET command to see all sales orders.</p>
             <pre><code>curl &#34;https://emea-poc13-test.apigee.net/business-objects-api/orders&#34; | json_pp</code></pre>
-            <p>Now you should see 4 results, including your <strong>&#34;new order&#34;</strong> in the last row.</p>
+            <p>Now you should see 11 results, including your <strong>&#34;new order&#34;</strong> in the last row.</p>
             <p>And now check back in <strong>Salesforce</strong>, and you should see data returned from SAP added to the
                 Description field.</p>
 
